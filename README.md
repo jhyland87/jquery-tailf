@@ -8,9 +8,7 @@ This example just grabs the text from pre#log every 1.5 seconds, and shows how m
 ```javascript
 new TailF({
 	// Attainer function
-	attainer: () => {
-		return $( 'pre#log' ).text()
-	},
+	attainer: () => $( 'pre#log' ).text(),
 	
 	// Parse the attainer results - Printing each line to the console, with the line number as the prefix
 	parser: ( newLines, fullContent ) => {
