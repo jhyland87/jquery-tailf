@@ -28,7 +28,7 @@ This example just grabs the text from pre#log every 1.5 seconds, and shows how m
 
 ### Advanced Example
 This example will tail the content of all `<pre>` elements found within the parent `<pre id="out">` element, then outputs the content to the console, with the line number as the prefix
-
+```javascript
 	var tail_advanced = new TailF({
 		// Attainer function - Tail/Monitor the combined content of all <pre> elements inside a <pre id="out"> element
 		attainer: () => {
@@ -65,6 +65,6 @@ This example will tail the content of all `<pre>` elements found within the pare
 		debug 		: false,
 		manualInit	: false
 	})
-
+```
 ### More to come!
 This was made out of necessity, so it only does what I need it to do, but I will definitely add more features, examples and documentation later
