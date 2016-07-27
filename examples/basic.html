@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+	<script src="../tailf.jquery.js"></script>
+  </head>
+  <body>
+  	<h2>Basic Example</h2>
+
+  	<p>
+  		In the below example, you can add text content to the <em>pre#log</em> element by populating the input and clicking the button. The <strong>TailF</strong> object is configured to watch the content of <em>pre#log</em>, and append any new lines to <em>pre#console</em> with the line number as the prefix.
+  	</p>
+  	<table style="width:100%">
+  		<tr>
+  			<th style="width:50%">
+  				Add New Data
+  			</th>
+  			<th>
+  				TailF Output
+  			</th>
+  		</tr>
+  		<tr>
+  			<td style="width:50%">
+  				<input id="new-line" style="width: 100%"/><br/>
+  				<button id="add-line" style="width: 100%">Add Line</button><hr/>
+  				<pre id="log"  style="width: 100%; border-color: #ff0000; border: 1px; background-color: #D3D3D3; min-height: 30px;"></pre>
+  			</td>
+  			<td>
+  				<pre id="console" style="width: 100%; background-color: #D3D3D3; min-height: 30px;"></pre>
+  			</td>
+  		</tr>
+  	</table>
+
+  </body>
+</html>
+<script>
+(function($){
+	$(document).ready(function(){
+$log = $( 'pre#log' )
+
+$( 'button#add-line' ).click(function(){
+	var $newLine = $( 'input#new-line' ),
+		line = $.trim( $newLine.val() )
+
+	if( line.length > 0 )
+		$log.append( line + "\n" )
+
+	$newLine.val('')
+})
+
+// Iniate TailF object passing an object of parameters
+window.consoleTail = new TailF({
+	// Attainer function - Just gets the value from the textarea
+	attainer: () => {
+		return $( 'pre#log' ).text()
+	},
+	
+	// Parse the attainer results - Printing each line to the console, with the line number as the prefix
+	parser: ( newLines, full ) => {
+		// If no new lines are found, dont do anything
+		if( ! newLines || Object.keys( newLines ).length === 0 )
+			return
+
+		// For each new line, print it to the console, with the line number as the prefix
+		$.each( newLines, function(lineNo, line){
+			$('pre#console').append( '[' + lineNo +'] ' + line + '\n' )
+			console.log( '[%s] %s', lineNo, line)
+		})
+	},
+	interval 	: 1000,
+	force 		: true,
+	debug 		: false,
+	manualInit	: false,
+	method 		: 'synchronous'
+})
+	})
+})(jQuery)
+
+
+
+window.consoleTail = new TailF({
+	// Attainer function
+	attainer: () => {
+		return $( 'pre#log' ).text()
+	},
+	
+	// Parse the attainer results - Printing each line to the console, with the line number as the prefix
+	parser: ( newLines, full ) => {
+		// If no new lines are found, dont do anything
+		if( ! newLines || Object.keys( newLines ).length === 0 )
+			return
+
+		// For each new line, print it to the console, with the line number as the prefix
+		$.each( newLines, function(lineNo, line){
+			$('pre#console').append( '[' + lineNo +'] ' + line + '\n' )
+			console.log( '[%s] %s', lineNo, line)
+		})
+	},
+	interval 	: 1000,
+	force 		: true,
+	debug 		: false,
+	manualInit	: false
+})
+
+// Iniate TailF object passing an object of parameters
+window.consoleTail = new TailF({
+	// Attainer function - Tail/Monitor the combined content of all <pre> elements inside a <pre id="out"> element
+	attainer: () => {
+		var $segments = $( 'pre#out > pre' ),
+			content   = []
+
+		if( ! $segments.length )
+			return 
+
+		// Iterate over the <pre> elements found and add the rows to the content array
+		$.each( $segments, function( k, pre ){
+			var $rows = $.trim($( pre ).text() ).split( '\n' )
+			$.merge( content, $rows )
+		})
+
+		// Return a concatenated version of the content
+		return content.join('\n')
+	},
+	
+	// Parse the attainer results - Printing each line to the console, with the line number as the prefix
+	parser: ( newLines, fullContent ) => {
+		// If no new lines are found, dont do anything
+		if( ! newLines || Object.keys( newLines ).length === 0 )
+			return
+
+		// For each new line, print it to the console, with the line number as the prefix
+		$.each( newLines, function(lineNo, line){
+			$('pre#console').append( '[' + lineNo +'] ' + line + '\n' )
+			console.log( '[%s] %s', lineNo, line)
+		})
+	},
+	interval 	: 1000,
+	force 		: true,
+	debug 		: false,
+	manualInit	: false
+})
+
+
+
+</script>
