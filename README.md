@@ -6,7 +6,7 @@ A simple ES6 class using jQuery to watch a specified element/content, basicaly s
 This example just grabs the text from pre#log every 1.5 seconds, and shows how many new lines were found via console output
 
 ```javascript
-var tail_basic = new TailF({
+new TailF({
 	// Attainer function
 	attainer: () => {
 		return $( 'pre#log' ).text()
@@ -28,7 +28,7 @@ var tail_basic = new TailF({
 ```
 
 ### Advanced Example
-This example will tail the content of all `<pre>` elements found within the parent `<pre id="out">` element, then outputs the content to the console, with the line number as the prefix
+This example will tail the content of all `<pre>` elements found within the parent `<pre id="out">` element, then outputs the content to the console, with the line number as the prefix. It also doesn't start the polling automatically, but theres an example of how to start/stop it using some of the TailF getter/setter properties
 
 ```javascript
 var tail_advanced = new TailF({
@@ -62,10 +62,15 @@ var tail_advanced = new TailF({
 			console.log( '[%s] %s', lineNo, line)
 		})
 	},
-	interval 	: 1000,
+	interval 	: 1500,
 	force 		: true,
 	debug 		: false,
-	manualInit	: false
+	manualInit	: true
+})
+
+// Click event for a button used to toggle the TailF instances polling
+$( 'button#toggle' ).click(function(){
+	tail_advanced.status = !tail_advanced.status
 })
 ```
 
